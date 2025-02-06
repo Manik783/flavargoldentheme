@@ -1,8 +1,39 @@
+
+"use client";
+
 import Link from "next/link";
 import { ShoppingBag, Users } from "lucide-react";
 import React from "react";
+import { useEffect,useState } from "react";
+export default function Home({ params }) {
+  const { rest_id } = params; // Extracting the param
+  const [Restaurant, setRestaurant] = useState(null);
+  const [Error, setError] = useState(null);
+  const [loading, setLoading] = useState(true); // Loading state
 
-export default function Home() {
+  useEffect(() => {
+    const fetchRestaurant = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/menu/restaurantinfo/${rest_id}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch restaurant details.");
+        }
+        const data = await response.json();
+        setRestaurant(data.restaurant); // Map API response
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRestaurant();
+  }, [rest_id]);
+  console.log(Restaurant);
+
+
   return (
     <main className="h-screen bg-[#FAF9F6] flex flex-col">
       {/* Header */}
@@ -56,7 +87,7 @@ export default function Home() {
           </a>
         </Link>
 
-        <Link href="/menu" legacyBehavior>
+        <Link href={`/menu/${rest_id}`} legacyBehavior>
           <a className="flex items-center gap-4 p-4 bg-white rounded-xl border border-orange-300 shadow-md">
             <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
               <Users className="w-6 h-6 text-orange-500" />

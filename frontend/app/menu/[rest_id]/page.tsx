@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState } from "react"
 import { Header } from "@/components/header"
@@ -9,6 +9,8 @@ import { MenuPopup } from "@/components/menu-popup"
 import { CartBar } from "@/components/cart-bar"
 import { CartScreen } from "@/components/cart-screen"
 import { Menu } from "lucide-react"
+import { useEffect } from "react";
+import axios from "axios";
 
 import React from "react";
 
@@ -44,7 +46,9 @@ const foodItems = [
   },
 ]
 
-export default function MenuPage() {
+export default function MenuPage({ params }) {
+  
+
   const [filter, setFilter] = useState("all")
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedDish, setSelectedDish] = useState<(typeof foodItems)[0] | null>(null)
@@ -53,6 +57,34 @@ export default function MenuPage() {
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [cart, setCart] = useState<{ [key: number]: number }>({})
 
+
+  const { rest_id } = params; // Extracting the param
+  const [MenuItems, setMenuItems] = useState("");
+  console.log(MenuItems);
+  useEffect(() => {
+    // Fetch data using Axios
+    axios
+      .get(`${process.env.NEXT_PUBLIC_BASE_URL}/menu/dishes/${rest_id}`)
+      .then((response) => {
+        const data = response.data;
+        const items = data.dishes.map((dish) => ({
+          id: dish.item_id,
+          name: dish.name,
+          price: dish.price,
+          serves: dish.serves,
+          isVeg: dish.isVeg,
+          description: dish.description,
+          image: dish.image,
+        }));
+        setMenuItems(items);
+       
+      })
+      .catch((error) => {
+        console.error("Error fetching menu:", error);
+      });
+  }, [rest_id]);
+
+  console.log(rest_id);
   const filteredItems = foodItems
     .filter((item) => {
       if (filter === "veg") return item.isVeg
