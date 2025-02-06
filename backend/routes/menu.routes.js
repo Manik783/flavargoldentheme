@@ -7,7 +7,7 @@ const menuController = require("../controllers/menu.controllers");
 // get restaurant's dishes
 router.get("/dishes/:rest_id", async (req, res, next) => {
   const rest_id = req.params.rest_id;
-  const dishes = await DishModel.find({ res_id: rest_id });
+  const dishes = await DishModel.find({ rest_id: rest_id });
   if (dishes.length == 0) {
     return res
       .status(404)
@@ -26,12 +26,12 @@ router.post("/addreview", async (req, res, next) => {
 
   if (!restaurant) {
     return res
-     .status(404)
-     .json({ message: "No restaurant found with this ID" });
+      .status(404)
+      .json({ message: "No restaurant found with this ID" });
   }
 
   res.status(200).json({ restaurant });
-})
+});
 // // get restaurant's details
 // router.get("/restaurant/:rest_id", async (req, res, next) => {
 //   const rest_id = req.params.rest_id;
@@ -50,7 +50,5 @@ router.get(
 
   menuController.getRestaurantInfo
 );
-
-
 
 module.exports = router;
