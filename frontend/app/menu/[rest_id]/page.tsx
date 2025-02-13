@@ -13,7 +13,7 @@ import { useSearchParams } from "next/navigation"
 
 export default function MenuPage({params }) {
   const searchParams = useSearchParams()
-  const { rest_id } = params; // Extracting the param
+  const { rest_id } = params; // Extracting the param// 
   const [foodItems, setFoodItems] = useState([]) // Store API data
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -22,7 +22,7 @@ export default function MenuPage({params }) {
   useEffect(() => {
     const fetchMenu = async () => {
       try {
-        const response = await fetch(`http://localhost:4000/menu/dishes/${rest_id}`)
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/menu/dishes/${rest_id}`)
         const data = await response.json()
         setFoodItems(data.dishes) // ✅ Store API response
       } catch (err) {
