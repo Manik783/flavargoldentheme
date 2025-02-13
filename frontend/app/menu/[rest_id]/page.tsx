@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Header } from "@/components/header"
 import { FilterChips } from "@/components/filter-chips"
 import { FoodCard } from "@/components/food-card"
@@ -9,114 +9,72 @@ import { MenuPopup } from "@/components/menu-popup"
 import { CartBar } from "@/components/cart-bar"
 import { CartScreen } from "@/components/cart-screen"
 import { Menu } from "lucide-react"
-import { useEffect } from "react";
-import axios from "axios";
+import { useSearchParams } from "next/navigation"
 
-import React from "react";
+export default function MenuPage({params }) {
+  const searchParams = useSearchParams()
+  const { rest_id } = params; // Extracting the param
+  const [foodItems, setFoodItems] = useState([]) // Store API data
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
-const foodItems = [
-  {
-    id: 1,
-    name: "Paneer Paratha",
-    price: 150,
-    serves: 2,
-    image: "https://dcfvgbhj.netlify.app/paneer.jfif",
-    isVeg: true,
-    isRecommended: true,
-    description:
-      "Lorem ipsum dolor amet, consectetur adipiscing elit. Gravida lorem consectetur diam semper nulla facilisi bibendum et. Et pulvinar, vitae placerat massa.",
-    modelSrc:
-      "https://snc-apac-1.sgp1.cdn.digitaloceanspaces.com/5f5ed230-8264-48f1-9190-c1a9b112280a/assets/3d/glb/15-04-2024-04-40-11_Paneer_Paratha.glb",
-    iosSrc:
-      "https://snc-apac-1.sgp1.cdn.digitaloceanspaces.com/5f5ed230-8264-48f1-9190-c1a9b112280a/assets/3d/usdz/15-04-2024-04-40-11_Paneer_Paratha.usdz",
-  },
-  {
-    id: 2,
-    name: "Chicken Paratha",
-    price: 180,
-    serves: 2,
-    image: "https://dcfvgbhj.netlify.app/chicken.jfif",
-    isVeg: false,
-    isRecommended: true,
-    description: "A delicious paratha stuffed with spiced chicken filling. Served with raita and pickle.",
-    modelSrc:
-      "https://snc-apac-1.sgp1.cdn.digitaloceanspaces.com/5f5ed230-8264-48f1-9190-c1a9b112280a/assets/3d/glb/15-04-2024-04-40-11_Paneer_Paratha.glb",
-    iosSrc:
-      "https://snc-apac-1.sgp1.cdn.digitaloceanspaces.com/5f5ed230-8264-48f1-9190-c1a9b112280a/assets/3d/usdz/15-04-2024-04-40-11_Paneer_Paratha.usdz",
-  },
-]
+  // Fetch menu items from API
+  useEffect(() => {
+    const fetchMenu = async () => {
+      try {
+        const response = await fetch(`http://localhost:4000/menu/dishes/${rest_id}`)
+        const data = await response.json()
+        setFoodItems(data.dishes) // ✅ Store API response
+      } catch (err) {
+        setError("Failed to load menu.")
+        console.error("Error fetching menu:", err)
+      } finally {
+        setLoading(false)
+      }
+    }
 
-export default function MenuPage({ params }) {
-  
+    fetchMenu()
+  }, [rest_id]) // Refetch when restaurant ID changes
 
   const [filter, setFilter] = useState("all")
   const [searchTerm, setSearchTerm] = useState("")
-  const [selectedDish, setSelectedDish] = useState<(typeof foodItems)[0] | null>(null)
+  const [selectedDish, setSelectedDish] = useState(null)
   const [isAROpen, setIsAROpen] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isCartOpen, setIsCartOpen] = useState(false)
-  const [cart, setCart] = useState<{ [key: number]: number }>({})
+  const [cart, setCart] = useState<{ [key: string]: number }>({})
 
-
-  const { rest_id } = params; // Extracting the param
-  const [MenuItems, setMenuItems] = useState("");
-  console.log(MenuItems);
-  useEffect(() => {
-    // Fetch data using Axios
-    axios
-      .get(`${process.env.NEXT_PUBLIC_BASE_URL}/menu/dishes/${rest_id}`)
-      .then((response) => {
-        const data = response.data;
-        const items = data.dishes.map((dish) => ({
-          id: dish.item_id,
-          name: dish.name,
-          price: dish.price,
-          serves: dish.serves,
-          isVeg: dish.isVeg,
-          description: dish.description,
-          image: dish.image,
-        }));
-        setMenuItems(items);
-       
-      })
-      .catch((error) => {
-        console.error("Error fetching menu:", error);
-      });
-  }, [rest_id]);
-
-  console.log(rest_id);
+  // Filter items based on search and category
   const filteredItems = foodItems
     .filter((item) => {
       if (filter === "veg") return item.isVeg
       if (filter === "non-veg") return !item.isVeg
-      if (filter === "recommended") return item.isRecommended
       return true
     })
     .filter((item) => item.name.toLowerCase().includes(searchTerm.toLowerCase()))
 
   const cartItemsCount = Object.values(cart).reduce((a, b) => a + b, 0)
 
-  const addToCart = (itemId: number) => {
+  const addToCart = (itemId: string) => {
     setCart((prev) => ({
       ...prev,
       [itemId]: (prev[itemId] || 0) + 1,
     }))
   }
 
-  // ✅ FIXED: Correctly update quantity and remove item when it reaches 0
-  const updateQuantity = (itemId: number, delta: number) => {
+  const updateQuantity = (itemId: string, delta: number) => {
     setCart((prev) => {
       const newQty = (prev[itemId] || 0) + delta
-
       if (newQty <= 0) {
-        // ✅ NEW: Removes the item from the cart if quantity is 0
         const { [itemId]: _, ...rest } = prev
         return rest
       }
-
       return { ...prev, [itemId]: newQty }
     })
   }
+
+  if (loading) return <div className="text-center py-10">Loading menu...</div>
+  if (error) return <div className="text-center text-red-500 py-10">{error}</div>
 
   return (
     <main className="min-h-screen pb-20">
@@ -126,11 +84,19 @@ export default function MenuPage({ params }) {
       <div className="divide-y">
         {filteredItems.map((item) => (
           <FoodCard
-            key={item.id}
-            {...item}
-            quantity={cart[item.id] || 0}
-            onQuantityChange={(delta) => updateQuantity(item.id, delta)}
-            onAdd={() => addToCart(item.id)}
+            key={item._id}
+            id={item._id}
+            name={item.name}
+            price={parseFloat(item.price)}
+            serves={item.serves}
+            isVeg={item.isVeg}
+            description={item.description}
+            image={item.image}
+            modelSrc={item.glb_url}
+            iosSrc={item.usdz_url}
+            quantity={cart[item._id] || 0}
+            onQuantityChange={(delta) => updateQuantity(item._id, delta)}
+            onAdd={() => addToCart(item._id)}
             onViewAR={() => {
               setSelectedDish(item)
               setIsAROpen(true)
@@ -153,13 +119,12 @@ export default function MenuPage({ params }) {
 
       <MenuPopup isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
 
-      {/* ✅ FIXED: CartScreen now receives correct props and updates dynamically */}
       <CartScreen
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
-        items={foodItems.filter((item) => cart[item.id])}
+        items={foodItems.filter((item) => cart[item._id])}
         quantities={cart}
-        onUpdateQuantity={updateQuantity} // ✅ FIXED: Ensures correct quantity updates
+        onUpdateQuantity={updateQuantity}
       />
     </main>
   )

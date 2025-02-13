@@ -1,27 +1,25 @@
-
 "use client";
 
 import Link from "next/link";
 import { ShoppingBag, Users } from "lucide-react";
-import React from "react";
-import { useEffect,useState } from "react";
-export default function Home({ params }) {
-  const { rest_id } = params; // Extracting the param
-  const [Restaurant, setRestaurant] = useState(null);
-  const [Error, setError] = useState(null);
-  const [loading, setLoading] = useState(true); // Loading state
+import React, { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+
+export default function Home() {
+  const { rest_id } = useParams(); // Extracting rest_id from dynamic route
+  const [restaurant, setRestaurant] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchRestaurant = async () => {
       try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/menu/restaurantinfo/${rest_id}`
-        );
+        const response = await fetch(`http://localhost:4000/menu/restaurantinfo/${rest_id}`);
         if (!response.ok) {
           throw new Error("Failed to fetch restaurant details.");
         }
         const data = await response.json();
-        setRestaurant(data.restaurant); // Map API response
+        setRestaurant(data.restaurant);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -31,8 +29,9 @@ export default function Home({ params }) {
 
     fetchRestaurant();
   }, [rest_id]);
-  console.log(Restaurant);
 
+  if (loading) return <p className="text-center text-lg">Loading...</p>;
+  if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
     <main className="h-screen bg-[#FAF9F6] flex flex-col">
@@ -41,35 +40,36 @@ export default function Home({ params }) {
         <div className="flex items-center gap-2">
           <span className="text-orange-500 text-xs">You're at</span>
         </div>
-        <p className="text-lg font-semibold text-black">Door No. 3</p>
+        <p className="text-lg font-semibold text-black">{restaurant?.name}</p>
       </div>
 
-      {/* Image Grid */}
+      {/* Image Grid - Dynamic Images */}
       <div className="px-6 py-4 h-[40vh] flex-grow-0">
         <div className="h-full grid grid-cols-2 gap-2">
-          <div className="rounded-lg overflow-hidden">
-            <img
-              src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd"
-              alt="Burger"
-              className="w-full h-full object-cover rounded-lg"
-            />
-          </div>
-          <div className="grid gap-2">
-            <div className="rounded-lg overflow-hidden">
-              <img
-                src="https://images.unsplash.com/photo-1536935338788-846bb9981813"
-                alt="Cocktail"
-                className="w-full h-full object-cover rounded-lg"
-              />
-            </div>
-            <div className="rounded-lg overflow-hidden">
-              <img
-                src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b"
-                alt="Drinks"
-                className="w-full h-full object-cover rounded-lg"
-              />
-            </div>
-          </div>
+          {restaurant?.images?.length > 0 ? (
+            <>
+              <div className="rounded-lg overflow-hidden">
+                <img
+                  src={restaurant.images[0]}
+                  alt="Restaurant"
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              </div>
+              <div className="grid gap-2">
+                {restaurant.images.slice(1, 3).map((img, index) => (
+                  <div key={index} className="rounded-lg overflow-hidden">
+                    <img
+                      src={img}
+                      alt={`Restaurant Image ${index + 2}`}
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : (
+            <p>No images available</p>
+          )}
         </div>
       </div>
 
