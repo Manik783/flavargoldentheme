@@ -14,7 +14,7 @@ export default function Home() {
   useEffect(() => {
     const fetchRestaurant = async () => {
       try {
-        const response = await fetch(`http://localhost:4000/menu/restaurantinfo/${rest_id}`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/menu/restaurantinfo/${rest_id}`);
         if (!response.ok) {
           throw new Error("Failed to fetch restaurant details.");
         }
