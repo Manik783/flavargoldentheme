@@ -34,7 +34,7 @@ export function CartScreen({
 
       {/* Cart Container */}
       <div className="fixed inset-x-0 bottom-0 bg-white rounded-t-3xl z-50 max-h-[90vh] overflow-y-auto shadow-lg">
-        
+
         {/* Cart Header */}
         <div className="sticky top-0 bg-white p-4 border-b flex items-center justify-between">
           <h2 className="text-xl font-semibold">Carts</h2> 

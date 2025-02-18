@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import React from "react";
 
 interface CartBarProps {
   itemCount: number;

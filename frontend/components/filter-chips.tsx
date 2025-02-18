@@ -1,63 +1,62 @@
-import { AlertTriangle } from "lucide-react";
-import React, { useState, useRef } from "react";
+import { AlertTriangle } from "lucide-react"
+import React, { useState, useRef } from "react"
 
 interface FilterChipsProps {
-  activeFilter: string;
-  onFilterChange: (filter: string) => void;
+  activeFilter: string
+  onFilterChange: (filter: string) => void
 }
 
 export function FilterChips({ activeFilter, onFilterChange }: FilterChipsProps) {
-  const [selectedFilter, setSelectedFilter] = useState(activeFilter);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const [selectedFilter, setSelectedFilter] = useState(activeFilter)
+  const scrollRef = useRef<HTMLDivElement>(null)
 
   const toggleFilter = (filter: string) => {
-    const newFilter = selectedFilter === filter ? "" : filter;
-    setSelectedFilter(newFilter);
-    onFilterChange(newFilter);
-  };
+    const newFilter = selectedFilter === filter ? "" : filter
+    setSelectedFilter(newFilter)
+    onFilterChange(newFilter)
+  }
 
-  const toggleBaseClass = "relative flex items-center w-14 h-7 rounded-full transition-all duration-300";
+  // Base class for the pill container with added border color
+  const toggleBaseClass = "relative flex items-center w-[59px] h-8 rounded-[20px] transition-all duration-300 border border-[#80808066]"
 
   return (
     <div className="flex gap-2 px-4 py-2 overflow-x-auto scrollbar-hide whitespace-nowrap w-full" ref={scrollRef}>
       <div className="flex space-x-2 items-center">
         {/* Veg Toggle */}
         <button
-          className={`${toggleBaseClass} ${selectedFilter === "veg" ? "bg-white" : "bg-gray-100"}`}
+          className={`${toggleBaseClass} ${selectedFilter === "veg" ? "bg-white" : "bg-white"}`}
           onClick={() => toggleFilter("veg")}
         >
+          {/* Background color strip */}
           <div
-            className={`absolute flex items-center transition-all duration-300
-              ${selectedFilter === "veg" ? "translate-x-1" : "translate-x-7"}`}
+            className={`absolute h-[9px] rounded-[20px] transition-all duration-300 left-3
+              ${selectedFilter === "veg" ? "w-[33px] bg-green-600" : "w-[16px] bg-white"}`}
+          />
+          {/* Square indicator that slides */}
+          <div
+            className={`absolute h-4 w-4 rounded-[2px] bg-white border border-green-600 transition-all duration-300 flex items-center justify-center
+              ${selectedFilter === "veg" ? "translate-x-8" : "translate-x-3"}`}
           >
-            <div className="relative flex items-center">
-              {/* Green stripe that extends horizontally */}
-              <div className={`absolute left-0 h-5 rounded-sm transition-all duration-300 flex items-center justify-center
-                ${selectedFilter === "veg" ? "w-10 bg-green-600" : "w-5 bg-white border border-gray-300"}`}>
-                {/* Maintaining original green dot */}
-                <div className="w-2 h-2 rounded-full bg-green-600" />
-              </div>
-            </div>
+            <div className="w-2 h-2 rounded-full bg-green-600" />
           </div>
         </button>
 
         {/* Non-Veg Toggle */}
         <button
-          className={`${toggleBaseClass} ${selectedFilter === "non-veg" ? "bg-white" : "bg-gray-100"}`}
+          className={`${toggleBaseClass} ${selectedFilter === "non-veg" ? "bg-white" : "bg-white"}`}
           onClick={() => toggleFilter("non-veg")}
         >
+          {/* Background color strip */}
           <div
-            className={`absolute flex items-center transition-all duration-300
-              ${selectedFilter === "non-veg" ? "translate-x-1" : "translate-x-7"}`}
+            className={`absolute h-[9px] rounded-[20px] transition-all duration-300 left-3
+              ${selectedFilter === "non-veg" ? "w-[33px] bg-red-500" : "w-[16px] bg-white"}`}
+          />
+          {/* Square indicator that slides */}
+          <div
+            className={`absolute h-4 w-4 rounded-[2px] bg-white border border-red-500 transition-all duration-300 flex items-center justify-center
+              ${selectedFilter === "non-veg" ? "translate-x-8" : "translate-x-3"}`}
           >
-            <div className="relative flex items-center">
-              {/* Red stripe that extends horizontally */}
-              <div className={`absolute left-0 h-5 rounded-sm transition-all duration-300 flex items-center justify-center
-                ${selectedFilter === "non-veg" ? "w-10 bg-red-500" : "w-5 bg-white border border-gray-300"}`}>
-                {/* Maintaining original red triangle */}
-                <AlertTriangle className="w-3 h-3 text-red-500 fill-red-500" />
-              </div>
-            </div>
+            <AlertTriangle className="w-[10px] h-[10px] text-red-500 fill-red-500" />
           </div>
         </button>
 
@@ -76,7 +75,7 @@ export function FilterChips({ activeFilter, onFilterChange }: FilterChipsProps) 
         ))}
       </div>
     </div>
-  );
+  )
 }
 
-export default FilterChips;
+export default FilterChips

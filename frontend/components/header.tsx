@@ -1,5 +1,4 @@
 "use client";
-
 import { MapPin, Search, SlidersHorizontal } from "lucide-react";
 import React from "react";
 import Link from "next/link";
@@ -15,19 +14,14 @@ export function Header({ onSearch }: HeaderProps) {
       <div className="flex items-center gap-3">
         {/* Clickable Icon */}
         <Link href="/">
-          <button
-            className="p-2 bg-[#FEF3EF] border border-[#E89F8E] rounded-full"
-          >
+          <button className="p-2 bg-[#FEF3EF] border border-[#E89F8E] rounded-full">
             <MapPin className="w-5 h-5 text-[#E05D3A]" />
           </button>
         </Link>
-
         {/* Location Text */}
         <div>
-          <p className="text-xs text-[#E08972] font-medium">You're at</p>  
-          <p className="text-sm font-semibold text-black">
-            Jl. Soekarno Hatta 15A...
-          </p>
+          <p className="text-xs text-[#E08972] font-medium">You're at</p>
+          <p className="text-sm font-semibold text-black">Jl. Soekarno Hatta 15A...</p>
         </div>
       </div>
 

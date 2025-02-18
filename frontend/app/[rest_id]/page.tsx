@@ -13,8 +13,12 @@ export default function Home() {
 
   useEffect(() => {
     const fetchRestaurant = async () => {
+      if (!rest_id) return; // Ensure rest_id is valid before calling API
+
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/menu/restaurantinfo/${rest_id}`);
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/menu/restaurantinfo/${rest_id}`
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch restaurant details.");
         }
@@ -71,6 +75,12 @@ export default function Home() {
             <p>No images available</p>
           )}
         </div>
+      </div>
+
+      {/* Restaurant Description */}
+      <div className="px-6 py-4">
+        <h3 className="text-lg font-semibold text-black">About {restaurant?.name}</h3>
+        <p className="text-gray-600">{restaurant?.description || "No description available."}</p>
       </div>
 
       {/* Options Section */}
