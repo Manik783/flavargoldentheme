@@ -83,7 +83,7 @@ export function FoodCard({
           className="w-[174px] h-[131px] object-cover rounded-[15px]"
         />
         <button
-          className="absolute bottom-0 right-11 z-10 bg-white text-[#E05D3A] border border-[#E05D3A] text-xs px-3 py-1 rounded-[10px] shadow-sm font-medium w-[85px] h-[30px]"
+          className="absolute bottom-[-15px] right-11 z-10 bg-white text-[#E05D3A] border border-[#E05D3A] text-xs px-3 py-1 rounded-[10px] shadow-sm font-medium w-[85px] h-[30px]"
           onClick={onViewAR}
         >
           View in AR
