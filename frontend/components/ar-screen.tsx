@@ -31,7 +31,7 @@ interface ARScreenProps {
     description: string;
     isVeg: boolean;
     image: string;
-    modelSrc: string;
+    glb_url: string;
     iosSrc: string;
   };
 }
@@ -88,7 +88,7 @@ export function ARScreen({ isOpen, onClose, dish }: ARScreenProps) {
           ) : (
             <model-viewer
               ref={modelViewerRef as any}
-              src={dish.modelSrc}
+              src={dish.glb_url}
               ios-src={dish.iosSrc}
               ar
               ar-modes="scene-viewer quick-look"

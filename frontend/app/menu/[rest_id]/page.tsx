@@ -107,9 +107,45 @@ export default function MenuPage({ params }) {
       id: item._id
     }))
 
+
   if (loading) return <div className="text-center py-10">Loading menu...</div>
   if (error) return <div className="text-center text-red-500 py-10">{error}</div>
 
+  function groupDishesByCategory(foodItems: FoodItem[]) {
+    const categoryMap: Record<string, FoodItem[]> = {};
+  
+    foodItems.forEach((item) => {
+      // Add to category1
+      if (item.category1) {
+        if (!categoryMap[item.category1]) {
+          categoryMap[item.category1] = [];
+        }
+        categoryMap[item.category1].push(item);
+      }
+  
+      // Add to category2
+      if (item.category2) {
+        if (!categoryMap[item.category2]) {
+          categoryMap[item.category2] = [];
+        }
+        categoryMap[item.category2].push(item);
+      }
+  
+      // Add to category3
+      if (item.category3) {
+        if (!categoryMap[item.category3]) {
+          categoryMap[item.category3] = [];
+        }
+        categoryMap[item.category3].push(item);
+      }
+    });
+  
+    // Convert the map to an array of category groups
+    return Object.keys(categoryMap).map((category) => ({
+      category,
+      items: categoryMap[category],
+    }));
+  }
   return (
     <main className="min-h-screen pb-20">
       <Header onSearch={setSearchTerm} />

@@ -24,6 +24,10 @@ export default function Home() {
         }
         const data = await response.json();
         setRestaurant(data.restaurant);
+        localStorage.setItem("restaurantName", JSON.stringify(data.restaurant.name));
+        localStorage.setItem("rest_id", JSON.stringify(data.restaurant.rest_id));
+
+
       } catch (err) {
         setError(err.message);
       } finally {
@@ -76,12 +80,12 @@ export default function Home() {
           )}
         </div>
       </div>
-
-      {/* Restaurant Description */}
+{/* 
+      Restaurant Description
       <div className="px-6 py-4">
         <h3 className="text-lg font-semibold text-black">About {restaurant?.name}</h3>
         <p className="text-gray-600">{restaurant?.description || "No description available."}</p>
-      </div>
+      </div> */}
 
       {/* Options Section */}
       <div className="px-6 py-4 flex flex-col gap-4">
