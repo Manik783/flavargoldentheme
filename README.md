@@ -10,32 +10,45 @@ This project is a luxury restaurant web application with a Royal Gold theme, fea
 
 ## Getting Started: Run Locally
 
-### 1. Clone the repository
+### Option 1: Using the setup script (Recommended)
+
+```bash
+git clone https://github.com/Manik783/flavargoldentheme.git
+cd flavargoldentheme
+chmod +x setup.sh
+./setup.sh
+```
+
+After running the setup script, follow the instructions to start the backend and frontend servers.
+
+### Option 2: Manual setup
+
+#### 1. Clone the repository
 ```bash
 git clone https://github.com/Manik783/flavargoldentheme.git
 cd flavargoldentheme
 ```
 
-### 2. Install dependencies
-#### Backend
+#### 2. Install dependencies
+##### Backend
 ```bash
 cd backend
 npm install
 ```
-#### Frontend
+##### Frontend
 ```bash
 cd ../frontend
 npm install
 ```
 
-### 3. Start the backend server
+#### 3. Start the backend server
 ```bash
 cd backend
 node simple-api.js
 ```
 - The backend will run on [http://localhost:3005](http://localhost:3005)
 
-### 4. Start the frontend server
+#### 4. Start the frontend server
 ```bash
 cd ../frontend
 npm run dev
@@ -46,8 +59,22 @@ npm run dev
 Visit [http://localhost:3007/menu/3](http://localhost:3007/menu/3) in your browser to see the luxury menu for restaurant 3 with the Royal Gold theme.
 
 ## Troubleshooting
-- If you see `EADDRINUSE` errors, make sure no other process is using the port, or kill the process using it.
-- If you see missing module errors (e.g., `framer-motion`), ensure all dependencies are installed and remove any unused imports.
+
+### Module not found errors
+If you encounter "Cannot find module" errors:
+```bash
+cd frontend
+rm -rf .next node_modules
+npm install
+```
+
+### Port already in use
+If you see `EADDRINUSE` errors:
+```bash
+# Find and kill the process using port 3005 (for backend)
+lsof -i :3005 | grep LISTEN | awk '{print $2}' | xargs kill -9
+```
+
 - If you change ports, update the URL accordingly.
 
 ## Customization
