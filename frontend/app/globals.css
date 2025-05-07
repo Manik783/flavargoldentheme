@@ -63,6 +63,29 @@ h1, h2, h3, h4, h5, h6 {
   border-image-slice: 1;
 }
 
+/* Pill-shaped filter button with gold border */
+.pill-gold-button {
+  border-radius: 9999px;
+  background-color: #000000;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.pill-gold-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  padding: 1px; /* Border width */
+  background: var(--gold-gradient);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  z-index: -1;
+}
+
 /* Toggle Switch Styles */
 .toggle-switch {
   @apply relative inline-flex h-6 w-11 items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none;
