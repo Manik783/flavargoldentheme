@@ -1,13 +1,16 @@
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, Sparkles } from "lucide-react";
 import React from "react";
 
 interface FoodCardProps {
-  id: number;
+  id: string;
   name: string;
   price: number;
   serves: number;
   image: string;
   isVeg: boolean;
+  description: string;
+  modelSrc: string;
+  iosSrc: string;
   quantity: number;
   onQuantityChange: (delta: number) => void;
   onAdd: () => void;
@@ -29,7 +32,6 @@ const NonVegIcon = () => (
 );
 
 export function FoodCard({
-  id,
   name,
   price,
   serves,
@@ -39,55 +41,79 @@ export function FoodCard({
   onQuantityChange,
   onAdd,
   onViewAR,
-}: FoodCardProps) {
+}: Omit<FoodCardProps, 'id' | 'modelSrc' | 'iosSrc' | 'description'>) {
+  // Get a pseudo-random value based on the dish name to determine if it's recommended
+  const isRecommended = name.charCodeAt(0) % 5 === 0;
+  
   return (
-    <div className="flex justify-between p-4" style={{ backgroundColor: "#FFFAF7" }}>
-      <div className="space-y-2">
-        <div className="flex items-center gap-1">
-          {isVeg ? <VegIcon /> : <NonVegIcon />}
-        </div>
-        <div>
-            {<h3 className="font-bold">{name}</h3>}
-            <p className="font-medium">₹{price}   <br/> 
-         <p className="text-xs text-gray-500">Serves {serves}</p>
-         </p>
-          </div>
-         <br/>
-        <div>
-          {quantity > 0 ? (
-            <div className="flex items-center border border-[#E05D3A] text-[#E05D3A] px-3 py-1 rounded-[9px] font-semibold text-sm w-fit">
-              <button className="text-[#E05D3A] font-bold px-2" onClick={() => onQuantityChange(-1)}>
-                -
-              </button>
-              <span className="text-[#E05D3A] font-semibold px-2">{quantity}</span>
-              <button className="text-[#E05D3A] font-bold px-2" onClick={() => onQuantityChange(1)}>
-                +
-              </button>
+    <div className="premium-card p-5 mb-4">
+      <div className="flex justify-between gap-4">
+        <div className="space-y-3 flex-1">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1">
+              {isVeg ? <VegIcon /> : <NonVegIcon />}
             </div>
-          ) : (
-            <button
-              onClick={onAdd}
-              className="flex items-center gap-2 border border-[#E05D3A] text-[#E05D3A] px-3 py-1 rounded-[9px] font-semibold"
-            >
-              ADD
-              <ShoppingCart className="stroke-[#E05D3A]" />
-            </button>
-          )}
+            {isRecommended && (
+              <div className="flex items-center text-xs font-medium">
+                <Sparkles size={14} className="mr-1" style={{color: '#A09460'}} />
+                <span className="gold-gradient-text">Chef&apos;s Special</span>
+              </div>
+            )}
+          </div>
+          
+          <div>
+            <h3 className="font-bold gold-gradient-text text-lg font-playfair">{name}</h3>
+            <p className="font-medium gold-gradient-text">₹{price}</p>
+            <p className="text-xs text-gray-400">Serves {serves}</p>
+          </div>
+          
+          <div>
+            {quantity > 0 ? (
+              <div className="flex items-center px-3 py-1 rounded-[10px] font-semibold text-sm w-fit bg-[#000000] shadow-[0_0_10px_rgba(160,148,96,0.1)] gold-gradient-border" style={{borderWidth: '1px'}}>
+                <button 
+                  className="font-bold px-2 hover:scale-110 transition-transform" 
+                  onClick={() => onQuantityChange(-1)}
+                  style={{color: '#A09460'}}
+                >
+                  -
+                </button>
+                <span className="gold-gradient-text font-semibold px-3">{quantity}</span>
+                <button 
+                  className="font-bold px-2 hover:scale-110 transition-transform" 
+                  onClick={() => onQuantityChange(1)}
+                  style={{color: '#A09460'}}
+                >
+                  +
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={onAdd}
+                className="flex items-center gap-2 px-4 py-1.5 rounded-[10px] font-semibold bg-[#000000] hover:bg-[#0a0a0a] hover:shadow-[0_0_15px_rgba(160,148,96,0.2)] transition-all duration-200 gold-gradient-border"
+                style={{borderWidth: '1px'}}
+              >
+                <span className="gold-gradient-text">ADD</span>
+                <ShoppingCart className="w-4 h-4" style={{stroke: '#A09460'}} />
+              </button>
+            )}
+          </div>
         </div>
-      </div>
 
-      <div className="relative w-[174px] h-[131px]">
-        <img
-          src={image || "/placeholder.svg"}
-          alt={name}
-          className="w-[174px] h-[131px] object-cover rounded-[15px]"
-        />
-        <button
-          className="absolute bottom-[-15px] right-11 z-10 bg-white text-[#E05D3A] border border-[#E05D3A] text-xs px-3 py-1 rounded-[10px] shadow-sm font-medium w-[85px] h-[30px]"
-          onClick={onViewAR}
-        >
-          View in AR
-        </button>
+        <div className="relative w-[174px] h-[131px]">
+          <img
+            src={image || "/placeholder.svg"}
+            alt={name}
+            className="w-[174px] h-[131px] object-cover rounded-[10px] shadow-md"
+          />
+          <div className="absolute bottom-[-12px] right-0 left-0 flex justify-center">
+            <button
+              className="luxury-button text-xs px-3 py-1 rounded-[10px] transform transition-all duration-200 hover:scale-105"
+              onClick={onViewAR}
+            >
+              View in AR
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

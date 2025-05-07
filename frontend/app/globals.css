@@ -2,13 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import Playfair Display and Poppins fonts */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
 :root {
-  --primary: #f24e1e;
-  --coral: #f24e1e;
+  --primary: #A09460;
+  --coral: #A09460;
   --success: #22c55e;
-  --background: #ffffff;
-  --text: #1a1a1a;
+  --background: #121212;
+  --card-bg: #000000;
+  --text: #ffffff;
   --gray: #757575;
+  --emerald: #50C878;
+  --royal-blue: #4169E1;
+  --gold-gradient: linear-gradient(135deg, #D4C494 10%, #BFB180 25%, #A09460 50%, #8B7E45 75%, #766A3B 90%);
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--background);
+  color: var(--text);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', serif;
 }
 
 .bg-coral {
@@ -21,6 +39,28 @@
 
 .border-coral {
   border-color: var(--coral);
+}
+
+.bg-card {
+  background-color: var(--card-bg);
+}
+
+/* Royal Gold Gradient Styles */
+.gold-gradient-bg {
+  background: var(--gold-gradient);
+}
+
+.gold-gradient-text {
+  background: var(--gold-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+}
+
+.gold-gradient-border {
+  border-image: var(--gold-gradient);
+  border-image-slice: 1;
 }
 
 /* Toggle Switch Styles */
@@ -50,36 +90,118 @@
 
 /* Cart and Menu Styles */
 .menu-popup {
-  @apply fixed bottom-0 left-0 w-full bg-coral rounded-t-3xl z-50 transform transition-transform duration-300 ease-out;
+  @apply fixed bottom-0 left-0 w-full bg-[#000000] border-t border-[#A09460] rounded-t-[10px] z-50 transform transition-transform duration-300 ease-out;
 }
 
 .cart-bar {
-  @apply fixed bottom-6 left-4 right-4 bg-success text-white rounded-full py-3 px-6 
-         flex items-center justify-between z-40 shadow-lg;
+  @apply fixed bottom-6 left-4 right-4 bg-[#000000] text-white rounded-[10px] py-3 px-6 
+         flex items-center justify-between z-40 shadow-lg border;
+  border-image: var(--gold-gradient);
+  border-image-slice: 1;
 }
 
 /* Quantity Controls */
 .quantity-control {
-  @apply inline-flex items-center border border-coral rounded-full overflow-hidden bg-white;
+  @apply inline-flex items-center rounded-[10px] overflow-hidden bg-[#000000];
+  border: 1px solid;
+  border-image: var(--gold-gradient);
+  border-image-slice: 1;
 }
 
 .quantity-button {
-  @apply w-8 h-8 flex items-center justify-center text-coral text-lg font-medium 
-         hover:bg-gray-50 transition-colors;
+  @apply w-8 h-8 flex items-center justify-center text-lg font-medium 
+         hover:bg-[#0a0a0a] transition-colors duration-200;
+  background: transparent;
+  background-clip: text;
+  color: #A09460;
 }
 
 .quantity-text {
-  @apply w-8 text-center font-medium text-coral;
+  @apply w-8 text-center font-medium;
+  background: var(--gold-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 /* Add Button */
 .add-button {
-  @apply px-6 py-2 bg-white border border-coral text-coral rounded-full text-sm font-medium
-         flex items-center gap-2 hover:bg-coral/10 transition-colors duration-200;
+  @apply px-6 py-2 bg-[#000000] rounded-[10px] text-sm font-medium
+         flex items-center gap-2 hover:bg-[#0a0a0a] hover:shadow-[0_0_10px_rgba(160,148,96,0.3)] transition-all duration-200;
+  border: 1px solid;
+  border-image: var(--gold-gradient);
+  border-image-slice: 1;
 }
 
 .add-button svg {
   @apply w-4 h-4;
+  stroke: #A09460;
+}
+
+/* Premium Card Styling */
+.premium-card {
+  @apply bg-[#000000] rounded-[10px] shadow-[0_4px_20px_rgba(0,0,0,0.3)] overflow-hidden border transition-transform duration-200 hover:shadow-[0_8px_25px_rgba(0,0,0,0.4)];
+  border-image: var(--gold-gradient);
+  border-image-slice: 1;
+  border-width: 1px;
+}
+
+/* Luxury Button */
+.luxury-button {
+  @apply text-[#000000] py-2 px-4 rounded-[10px] text-sm font-medium 
+         hover:shadow-[0_0_15px_rgba(160,148,96,0.3)] 
+         transition-all duration-200 flex items-center justify-center gap-2;
+  background: var(--gold-gradient);
+  position: relative;
+  overflow: hidden;
+  border: none;
+}
+
+.luxury-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.7s;
+}
+
+.luxury-button:hover::before {
+  left: 100%;
+}
+
+/* Tab Styling */
+.luxury-tab {
+  @apply py-2 px-4 text-sm font-medium relative transition-colors duration-200 border-b-2 border-transparent;
+}
+
+.luxury-tab.active {
+  @apply border-[#A09460];
+  background: var(--gold-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.luxury-tab:hover:not(.active) {
+  @apply border-[#A09460]/20;
+  background: var(--gold-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  opacity: 0.8;
+}
+
+/* Recommended Badge */
+.recommended-badge {
+  @apply absolute top-2 right-2 bg-[#50C878] text-white text-xs py-1 px-2 rounded-full shadow-md;
+}
+
+/* Special Badge */
+.special-badge {
+  @apply absolute top-2 right-2 bg-[#4169E1] text-white text-xs py-1 px-2 rounded-full shadow-md;
 }
 
 model-viewer {
